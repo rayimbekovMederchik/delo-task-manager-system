@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Form</title>
+    <link rel="stylesheet" th:href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${task.id == null} ? 'Create New Task' : 'Edit Task'"></h1>
+
+    <form th:action="@{/tasks/save}" th:object="${task}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="form-group">
+            <label>Title:</label>
+            <input type="text" th:field="*{title}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Description:</label>
+            <textarea th:field="*{description}"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Status:</label>
+            <select th:field="*{status}">
+                <option th:each="status : ${statuses}"
+                        th:value="${status}"
+                        th:text="${status}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Priority:</label>
+            <select th:field="*{priority}">
+                <option th:each="priority : ${priorities}"
+                        th:value="${priority}"
+                        th:text="${priority}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Category:</label>
+            <select name="categoryId">
+                <option value="">No Category</option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}"
+                        th:selected="${task.category != null and task.category.id == category.id}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit">Save Task</button>
+    </form>
+
+    <a class="back-link" href="/">Back to task list</a>
+</div>
+</body>
+</html>

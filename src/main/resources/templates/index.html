@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Delo Tasks</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <div class="top-bar">
+        <div>
+            <h1>Delo Task Manager</h1>
+            <p>Spring Boot + Thymeleaf + PostgreSQL</p>
+        </div>
+        <div class="actions">
+            <a href="/tasks/new">Create New Task</a>
+        </div>
+    </div>
+
+    <form class="filter-form" method="get" action="/">
+        <label for="status">Filter by status:</label>
+        <select name="status" id="status">
+            <option value="">All</option>
+            <option th:each="status : ${statuses}"
+                    th:value="${status}"
+                    th:text="${status}"
+                    th:selected="${selectedStatus == status}">
+            </option>
+        </select>
+        <button type="submit">Apply</button>
+        <a class="btn" href="/">Reset</a>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.title}">Title</td>
+            <td th:text="${task.description}">Description</td>
+            <td th:text="${task.status}">Status</td>
+            <td th:text="${task.priority}">Priority</td>
+            <td th:text="${task.category != null ? task.category.name : 'No Category'}">Category</td>
+            <td class="inline-actions">
+                <a th:href="@{/tasks/edit/{id}(id=${task.id})}">Edit</a>
+                <a th:href="@{/tasks/delete/{id}(id=${task.id})}"
+                   onclick="return confirm('Delete this task?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
